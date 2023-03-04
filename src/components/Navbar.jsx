@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom'
 
 const pages = ['Home'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const rightHandMenu = [{name: "Login", url: "/login"}]
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -56,7 +57,7 @@ function Navbar() {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            FOOD RECIPE
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -116,9 +117,8 @@ function Navbar() {
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Link to={`/`} style={{textDecoration: 'none'}}>
+              <Link key={page} to={`/`} style={{textDecoration: 'none'}}>
                 <Button
-                  key={page}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: 'white', display: 'block' }}
                 >
@@ -128,12 +128,26 @@ function Navbar() {
             ))}
           </Box>
 
+
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            
+            {rightHandMenu.map((page) => (
+              <Link key={page.name} to={page.url} style={{textDecoration: 'none'}}>
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page.name}
+                </Button>
+              </Link>
+            ))}
+
+            {/* if user is logged in */}
+            {/* <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
