@@ -12,9 +12,9 @@ export default function PublicRecipesList() {
     const { data, isLoading, error } = recipeService.publicRecipes(page)
 
     useEffect(() => {
-        if (data) {
+        if (data) 
           setPageCount(data.data.pagination.pageCount);
-        }
+        
     }, [data]);
 
     function handlePageChange(value) {

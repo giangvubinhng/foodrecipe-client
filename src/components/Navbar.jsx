@@ -13,14 +13,17 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { Link } from 'react-router-dom'
+import { useStore } from '../utils/store';
 
 const pages = ['Home'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 const rightHandMenu = [{name: "Login", url: "/login"}]
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const user = useStore((state) => state.user);
+  const logout = useStore ((state) => state.logout)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -36,6 +39,13 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogOut = async () => {
+    await logout()
+    handleCloseUserMenu()
+
+  }
+  const settings = [{name: 'Logout', func: handleLogOut}];
 
   return (
     <AppBar >
@@ -131,7 +141,18 @@ function Navbar() {
 
           <Box sx={{ flexGrow: 0 }}>
             
-            {rightHandMenu.map((page) => (
+
+            {/* if user is logged in */}
+            {user && user.isLoggedIn ? (
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                {/* <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" /> */}
+                Hi, {user.firstName}
+              </IconButton>
+            </Tooltip>
+
+            ): 
+            rightHandMenu.map((page) => (
               <Link key={page.name} to={page.url} style={{textDecoration: 'none'}}>
                 <Button
                   onClick={handleCloseNavMenu}
@@ -141,13 +162,7 @@ function Navbar() {
                 </Button>
               </Link>
             ))}
-
-            {/* if user is logged in */}
-            {/* <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip> */}
+            
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"
@@ -165,8 +180,8 @@ function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting.name} onClick={setting.func}>
+                  <Typography textAlign="center">{setting.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>

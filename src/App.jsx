@@ -1,8 +1,11 @@
 import { Outlet } from "react-router-dom"
+import { useStore } from "./utils/store"
 import Navbar from "./components/Navbar"
 import './App.css'
 
 function App() {
+  const fetchUserAsync = useStore((state) => state.fetchUserAsync)
+  fetchUserAsync()
 
   return (
     <div className="App">

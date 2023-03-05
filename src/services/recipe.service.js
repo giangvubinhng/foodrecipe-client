@@ -1,10 +1,11 @@
 import axios from "axios";
-import config from "../utils/config";
 import useSWR from 'swr';
+import config from "../utils/config.js";
 
-const fetcher = url => axios.get(`${config.API}${url}`).then(res => res.data)
+const fetcher = url => 
+  axios.get(`${config.API}${url}`).then(res => res.data)
 
-function publicRecipes (page) {
+function publicRecipes(page) {
   const { data, error, isLoading } = useSWR(`/recipes?page=${page}`, fetcher)
  
   return {
